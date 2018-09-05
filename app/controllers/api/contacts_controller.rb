@@ -9,10 +9,14 @@ class Api::ContactsController < ApplicationController
                            first_name: params[:first_name],
                            last_name: params[:last_name],
                            email: params[:email],
-                           phone_number: params[:phone_number]
+                           phone_number: params[:phone_number],
+                           bio: params[:bio]
                           )
-    @contact.save
+   if @contact.save
     render 'show.json.jbuilder'
+   else
+    render render json: {errors: @products.errors.full_messages}, status: :unprocessable_entity
+   end
   end
 
   def show
@@ -30,8 +34,11 @@ class Api::ContactsController < ApplicationController
     @contact.email = params[:email] || @contact.email
     @contact.phone_number = params[:phone_number] || @contact.phone_number
 
-    @contact.save
+    if @contact.save
     render 'show.json.jbuilder'
+  else
+    render json: {errors: @products.errors.full_messages}, status: :unprocessable_entity
+  end
   end
 
   def destroy
